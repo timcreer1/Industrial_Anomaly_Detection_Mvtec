@@ -82,7 +82,6 @@ As a result:
     │
     ├── data/
     │   ├── raw/                      # local / Kaggle only; not committed
-    │   ├── processed/                # lightweight saved metadata only
     │
     ├── outputs/
     │   ├── figures/                  # committed final figures used for review / report
