@@ -1,0 +1,23 @@
+name: mvtec-anomaly-detection
+channels:
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - pillow
+  - pyyaml
+  - tqdm
+  - jupyter
+  - ipykernel
+  - pytorch
+  - torchvision
+  - cpuonly
+  - pip:
+      - opencv-python
+      - faiss-cpu

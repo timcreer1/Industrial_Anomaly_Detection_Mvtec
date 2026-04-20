@@ -1,0 +1,248 @@
+# Industrial Anomaly Detection and Defect Localisation (MVTec AD)
+
+Comparing ImageNet-pretrained and self-supervised feature representations for industrial visual anomaly detection and defect localisation on the MVTec AD benchmark.
+The project evaluates PatchCore, PaDiM, an autoencoder baseline, and SimCLR-based downstream variants under a leakage-safe, reproducible pipeline.
+
+> Primary objective: determine whether self-supervised SimCLR pretraining on normal industrial images improves downstream anomaly detection relative to strong ImageNet baselines.
+
+* * *
+##  Project Overview
+
+This repository implements a reproducible, research-style deep learning pipeline for industrial anomaly detection:
+
+  * Dataset audit, split creation, and explicit leakage checking
+  * Baseline comparison across ImageNet PatchCore, ImageNet PaDiM, and an autoencoder
+  * Self-supervised SimCLR pretraining on normal-only industrial images
+  * Downstream comparison of SimCLR mild/strong encoders with PatchCore and PaDiM
+  * Threshold analysis, ablations, efficiency comparison, and failure analysis
+
+The project is built around MVTec AD and evaluates both image-level anomaly detection and pixel-level defect localisation.
+
+* * *
+##  Results (summary)
+
+The strongest overall model was **ImageNet PaDiM**, which outperformed all SimCLR-based variants under the final matched comparison.
+
+  * Mean image PR-AUC: **0.956** (ImageNet PaDiM)
+  * Mean image PR-AUC: **0.920** (ImageNet PatchCore)
+  * Best SSL model: **SimCLR mild PaDiM** with mean image PR-AUC **0.897**
+  * Autoencoder baseline: mean image PR-AUC **0.767**
+  * Threshold analysis showed that **ImageNet PaDiM retained materially stronger recall** than the best SSL alternative at practical operating points
+
+> In short: under the settings used in this study, strong ImageNet-pretrained baselines remained difficult to beat, and threshold calibration mattered as much as the headline ranking metrics.
+
+* * *
+## ⚙️ Execution Environment (Important)
+
+  * Platform: final full runs executed in **Kaggle Notebooks**
+  * Hardware: **2 × Tesla T4 GPUs**
+  * Core environment: **Python 3.12.12**, **PyTorch 2.10.0+cu128**, **Torchvision 0.25.0+cu128**
+  * Reason: SimCLR pretraining, downstream benchmarking, and full visual artefact generation were too heavy for a reliable Colab workflow
+
+As a result:
+
+  * The project is organised as executed research notebooks plus lightweight saved artefacts
+  * Key figures, summary tables, and JSON run metadata are retained for easier review
+  * The raw dataset and large intermediate artefacts are intentionally not committed to GitHub
+
+* * *
+##  Repository Structure
+    industrial-anomaly-detection-mvtec/
+    │
+    ├── README.md
+    ├── requirements.txt
+    ├── environment.yml
+    ├── .gitignore
+    ├── LICENSE
+    │
+    ├── notebooks/
+    │   ├── 01_dataset_audit_and_splits.ipynb
+    │   ├── 02_baseline_imagenet_models.ipynb
+    │   ├── 03_autoencoder_baseline.ipynb
+    │   ├── 04_simclr_pretraining.ipynb
+    │   ├── 05_ssl_downstream_models.ipynb
+    │   ├── 06_main_comparison_and_thresholds.ipynb
+    │   ├── 07_ablations.ipynb
+    │   ├── 08_failure_analysis.ipynb
+    │   └── 99_reproduce_full_pipeline.ipynb
+    │
+    ├── src/
+    │   ├── data_utils.py
+    │   ├── split_utils.py
+    │   ├── leakage_checks.py
+    │   ├── transform_utils.py
+    │   ├── backbone_utils.py
+    │   ├── patchcore_utils.py
+    │   ├── padim_utils.py
+    │   ├── autoencoder_utils.py
+    │   ├── simclr_utils.py
+    │   ├── metrics_utils.py
+    │   ├── threshold_utils.py
+    │   ├── heatmap_utils.py
+    │   └── plot_utils.py
+    │
+    ├── data/
+    │   ├── raw/                      # local / Kaggle only; not committed
+    │   ├── processed/                # lightweight saved metadata only
+    │
+    ├── outputs/
+    │   ├── figures/                  # committed final figures used for review / report
+    │   ├── tables/                   # committed CSV summaries
+    │   └── json/                     # committed run metadata / settings / manifests
+    │
+    ├── models/
+    │   └── checkpoints_link.md       
+    │
+    └── reports/
+        └── Timothy_Creer_Final_Project.pdf
+* * *
+## ️ About Results and Outputs
+
+To keep the repository lightweight and easy to review:
+
+✅ Committed to GitHub
+
+  * `outputs/figures/*.png` (main comparison plots, heatmaps, threshold figures, ablation figures, failure examples)
+  * `outputs/tables/*.csv` (mean metrics, category metrics, threshold summaries, ablation summaries, efficiency tables)
+  * `outputs/json/*.json` (split manifests, run metadata, settings, checkpoint summaries)
+  * Executed notebooks showing the full workflow and saved outputs
+
+❌ Not committed to GitHub
+
+  * Raw MVTec AD dataset
+  * Large intermediate tensors / caches
+  * Full checkpoint files when too large for GitHub
+  * Heavy temporary outputs that can be regenerated by rerunning the notebooks
+
+Everything excluded can be regenerated by running the notebooks in order or by running the full reproduction notebook.
+
+* * *
+##  Data source
+
+Dataset: **MVTec AD** (industrial anomaly detection benchmark with image-level labels and pixel-level masks).
+
+The dataset is intentionally not committed to GitHub. Use either:
+
+  * a Kaggle-linked MVTec AD dataset runtime, or
+  * a local dataset directory configured in the notebook path settings
+
+Expected directory structure follows the standard MVTec AD layout with category folders and `train/good`, `test`, and `ground_truth` subfolders.
+
+* * *
+## ⚙️ How to run
+
+### Recommended notebook order
+
+  1. `01_dataset_audit_and_splits.ipynb` → dataset audit, split creation, leakage checks, saved manifests
+  2. `02_baseline_imagenet_models.ipynb` → ImageNet PatchCore + ImageNet PaDiM baselines
+  3. `03_autoencoder_baseline.ipynb` → reconstruction baseline + merged baseline comparison tables
+  4. `04_simclr_pretraining.ipynb` → SimCLR mild / strong pretraining on normal-only images
+  5. `05_ssl_downstream_models.ipynb` → downstream PatchCore / PaDiM using saved SimCLR encoders
+  6. `06_main_comparison_and_thresholds.ipynb` → overall comparison, threshold policies, dense threshold sweep
+  7. `07_ablations.ipynb` → augmentation, feature layer, and PatchCore coreset ablations
+  8. `08_failure_analysis.ipynb` → weakest-category inspection and qualitative failure examples
+
+### Full reproduction option
+
+Run:
+
+    99_reproduce_full_pipeline.ipynb
+
+This notebook keeps the full end-to-end workflow in one place for a single-run reproduction.
+
+### Minimal setup
+
+  1. Create the environment and install dependencies:
+
+    pip install -r requirements.txt
+
+  2. Ensure the MVTec AD dataset path is available locally or via Kaggle
+  3. Run the notebooks in order above
+
+* * *
+##  Methods compared
+
+### 1. ImageNet PatchCore
+
+  * ResNet-18 feature extractor pretrained on ImageNet
+  * Patch-level nearest-neighbour anomaly scoring using a memory bank
+  * Produces both image-level anomaly scores and localisation heatmaps
+
+### 2. ImageNet PaDiM
+
+  * ResNet-18 feature extractor pretrained on ImageNet
+  * Patch-wise Gaussian modelling with Mahalanobis distance scoring
+  * Strongest overall method in the final comparison
+
+### 3. Autoencoder baseline
+
+  * Convolutional reconstruction model trained only on normal images
+  * Uses reconstruction residuals as anomaly evidence
+  * Included as a simpler baseline from a different modelling family
+
+### 4. SimCLR mild / strong + PatchCore / PaDiM
+
+  * Self-supervised contrastive pretraining on normal industrial images
+  * Two augmentation settings: **mild** and **strong**
+  * Frozen encoders reused downstream with PatchCore and PaDiM
+
+* * *
+##  Key findings
+
+  * **ImageNet PaDiM was the strongest overall model** across the final matched comparison
+  * **SimCLR-based features did not outperform the ImageNet baselines** under the settings used in this study
+  * **Mild SimCLR augmentation performed slightly better than strong augmentation** overall
+  * **Layer3** was the strongest feature layer in the layer ablation
+  * Increasing the **PatchCore coreset ratio** improved accuracy but increased memory cost
+  * Some categories were consistently harder than others, particularly **transistor, screw, grid, cable, and toothbrush**
+  * Even the best method still showed clear failure cases, especially in harder categories where heatmaps drifted toward edges or highlights
+
+* * *
+##  Notes on evaluation design
+
+  * Validation was built from held-out normal-only images to keep threshold selection separate from the final test set
+  * Leakage prevention was explicitly checked through file-path overlap tests and MD5 duplicate checks
+  * Evaluation included both threshold-free metrics and threshold-dependent operating policies
+  * Practical operating policies were compared using **high_recall**, **balanced**, and **low_false_alarm** thresholds
+
+This design was intended to keep the comparison fair, interpretable, and closer to a realistic industrial inspection setting.
+
+* * *
+##  Limitations
+
+  * Results are primarily based on **MVTec AD**, so external validity is limited to one benchmark
+  * Only **SimCLR** was tested as the self-supervised method
+  * Compute constraints limited model size and broader experimentation
+  * The project uses a controlled, portfolio-style research workflow rather than a production deployment system
+
+* * *
+##  Project provenance (academic context)
+
+This repository is a portfolio-ready version of a University of Sydney postgraduate deep learning final project on industrial anomaly detection and defect localisation.
+
+The original project aim was not just to report the best score, but to answer a focused research question through:
+
+  * a controlled baseline comparison
+  * self-supervised pretraining
+  * threshold analysis
+  * targeted ablations
+  * failure analysis
+
+> In short: the repo is intended to show an end-to-end, research-style deep learning workflow with clear methodological reasoning and practical evaluation trade-offs.
+
+* * *
+##  Report
+
+The final report is included in:
+
+    reports/Timothy_Creer_Final_Project.pdf
+
+It provides the full methodology, discussion, visual results, and references.
+
+* * *
+##  References
+
+  * Bergmann, P. et al. (2019). MVTec AD: A comprehensive real-world dataset for unsupervised anomaly detection.
+  * Chen, T. et al. (2020). A simple framework for contrastive learning of visual representations.
+  * Defard, T. et al. (2020). PaDiM: A patch distribution modeling framework for anomaly detection and localization.
+  * Roth, K. et al. (2021). Towards total recall in industrial anomaly detection.
