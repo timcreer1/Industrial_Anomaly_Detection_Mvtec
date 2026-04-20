@@ -1,0 +1,20 @@
+# Core scientific stack
+numpy>=1.26
+pandas>=2.2
+matplotlib>=3.8
+Pillow>=10.0
+scikit-learn>=1.4
+
+# Deep learning
+# In Kaggle these are already available.
+# For local GPU installs, you may prefer installing torch/torchvision
+# from the PyTorch site with the CUDA build that matches your system.
+torch
+torchvision
+
+# Utilities
+tqdm>=4.66
+faiss-cpu>=1.8
+ipython>=8.0
+ipykernel>=6.29
+jupyterlab>=4.0
