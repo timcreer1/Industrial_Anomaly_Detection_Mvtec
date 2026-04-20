@@ -1,0 +1,16 @@
+category,train_good_n,test_good_n,test_anomaly_n,test_total_n,n_defect_types,defect_types,masks_total_n,has_masks,train_only_good,mask_style,mask_missing_total,mask_extra_total,shape_mismatch_sample
+bottle,209,20,63,83,3,broken_large;broken_small;contamination,63,1,1,stem_mask,0,0,0
+cable,224,58,92,150,8,bent_wire;cable_swap;combined;cut_inner_insulation;cut_outer_insulation;missing_cable;missing_wire;poke_insulation,92,1,1,stem_mask,0,0,0
+capsule,219,23,109,132,5,crack;faulty_imprint;poke;scratch;squeeze,109,1,1,stem_mask,0,0,0
+carpet,280,28,89,117,5,color;cut;hole;metal_contamination;thread,89,1,1,stem_mask,0,0,0
+grid,264,21,57,78,5,bent;broken;glue;metal_contamination;thread,57,1,1,stem_mask,0,0,0
+hazelnut,391,40,70,110,4,crack;cut;hole;print,70,1,1,stem_mask,0,0,0
+leather,245,32,92,124,5,color;cut;fold;glue;poke,92,1,1,stem_mask,0,0,0
+metal_nut,220,22,93,115,4,bent;color;flip;scratch,93,1,1,stem_mask,0,0,0
+pill,267,26,141,167,7,color;combined;contamination;crack;faulty_imprint;pill_type;scratch,141,1,1,stem_mask,0,0,0
+screw,320,41,119,160,5,manipulated_front;scratch_head;scratch_neck;thread_side;thread_top,119,1,1,stem_mask,0,0,0
+tile,230,33,84,117,5,crack;glue_strip;gray_stroke;oil;rough,84,1,1,stem_mask,0,0,0
+toothbrush,60,12,30,42,1,defective,30,1,1,stem_mask,0,0,0
+transistor,213,60,40,100,4,bent_lead;cut_lead;damaged_case;misplaced,40,1,1,stem_mask,0,0,0
+wood,247,19,60,79,5,color;combined;hole;liquid;scratch,60,1,1,stem_mask,0,0,0
+zipper,240,32,119,151,7,broken_teeth;combined;fabric_border;fabric_interior;rough;split_teeth;squeezed_teeth,119,1,1,stem_mask,0,0,0

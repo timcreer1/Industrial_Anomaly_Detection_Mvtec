@@ -1,0 +1,46 @@
+{
+  "run_mode": "full",
+  "seed": 42,
+  "device": "cuda",
+  "mvtec_dir": "/kaggle/input/datasets/ipythonx/mvtec-ad",
+  "categories": [
+    "bottle",
+    "cable",
+    "capsule",
+    "carpet",
+    "grid",
+    "hazelnut",
+    "leather",
+    "metal_nut",
+    "pill",
+    "screw",
+    "tile",
+    "toothbrush",
+    "transistor",
+    "wood",
+    "zipper"
+  ],
+  "image_size": 224,
+  "val_frac": 0.1,
+  "batch_size_train": 32,
+  "batch_size_test": 16,
+  "backbone_name": "resnet18_imagenet",
+  "patch_layer_names": [
+    "layer3"
+  ],
+  "padim_layer_name": "layer3",
+  "patchcore": {
+    "coreset_ratio": 0.05,
+    "max_train_patches": 120000,
+    "score_topk_pixels": 200
+  },
+  "padim": {
+    "dim": 100,
+    "eps": 0.0001,
+    "score_topk_pixels": 200
+  },
+  "autoencoder": {
+    "epochs": 5,
+    "lr": 0.001
+  }
+}
