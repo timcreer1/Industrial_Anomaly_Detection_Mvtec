@@ -53,7 +53,6 @@ As a result:
     ├── requirements.txt
     ├── environment.yml
     ├── .gitignore
-    ├── LICENSE
     │
     ├── notebooks/
     │   ├── 01_dataset_audit_and_splits.ipynb
